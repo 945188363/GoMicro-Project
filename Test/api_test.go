@@ -1,6 +1,7 @@
 package Test
 
 import (
+	"GoMicro-Project/LoadBalancer"
 	"fmt"
 	"github.com/micro/go-micro/client/selector"
 	"github.com/micro/go-micro/registry"
@@ -66,4 +67,8 @@ func TestAPI2(t *testing.T) {
 		return
 	}
 	fmt.Println(res)
+}
+
+func TestLB(t *testing.T) {
+	LoadBalancer.Test()
 }
