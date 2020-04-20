@@ -4,7 +4,7 @@
 // 	protoc        v3.11.4
 // source: Prods.proto
 
-package Models
+package PB
 
 import (
 	proto "github.com/golang/protobuf/proto"
