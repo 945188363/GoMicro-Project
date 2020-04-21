@@ -1,42 +1,45 @@
 package main
 
 import (
-	"GoMicro-Project/Service/ProdService"
-	"github.com/gin-gonic/gin"
+	"GoMicro-Project/Routers"
+	"GoMicro-Project/Service/Micros"
+	"GoMicro-Project/ServiceImpl"
+	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
+	"github.com/micro/go-micro/registry/mdns"
 	"github.com/micro/go-micro/web"
-	"github.com/micro/go-plugins/registry/consul"
 )
 
 func main() {
 	// 注册到mdns
-	// consulReg :=mdns.NewRegistry(
-	// 	registry.Addrs("192.168.2.1"),
-	// )
-	// 注册到consul
-	consulReg := consul.NewRegistry(
+	mdnsReg := mdns.NewRegistry(
 		registry.Addrs("192.168.2.1"),
 	)
+	// 注册到consul
+	// consulReg := consul.NewRegistry(
+	// 	registry.Addrs("192.168.2.1"),
+	// )
 
-	ginRouter := gin.Default()
-	ginGroup := ginRouter.Group("/v1")
-	{
-		ginGroup.Handle("GET", "/prods", func(context *gin.Context) {
-			context.JSON(200, ProdService.NewProdList(5))
-		})
-	}
-	ginRouter.Handle("GET", "/users", func(context *gin.Context) {
-		context.String(200, "users api")
-	})
-
-	service := web.NewService(
-		web.Name("ProdService"),
+	httpService := web.NewService(
+		web.Name("ProdServiceHttp"),
 		web.Address(":8888"),
-		web.Handler(ginRouter),
-		web.Registry(consulReg),
+		web.Handler(Routers.NewGinRouter()),
+		// web.Registry(consulReg),
 	)
-	// Service.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
+	rpcService := micro.NewService(
+		micro.Name("ProdServiceRPC"),
+		micro.Address(":8881"),
+		// micro.Registry(consulReg),
+		micro.Registry(mdnsReg),
+	)
+	// 注册并启动rpc服务
+	rpcService.Init()
+	Micros.RegisterProdService1Handler(rpcService.Server(), new(ServiceImpl.ProdService1))
+	rpcService.Run()
+
+	// TestService.HandleFunc("/", func(w http.ResponseWriter, request *http.Request) {
 	// 	w.Write([]byte("hello world"))
 	// })
-	service.Run()
+	// 启动http服务
+	httpService.Run()
 }

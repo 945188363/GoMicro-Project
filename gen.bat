@@ -1,3 +1,3 @@
 cd Models/Protos
-protoc --micro_out=../ --go_out=../ Prods.proto
+protoc --micro_out=../ --go_out=../ ProdService
 cd.. && cd..
