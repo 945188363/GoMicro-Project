@@ -4,6 +4,7 @@ import (
 	"GoMicro-Project/LoadBalancer"
 	"GoMicro-Project/Service/Micros"
 	"GoMicro-Project/Service/Model"
+	"GoMicro-Project/Wrapper"
 	"context"
 	"fmt"
 	"github.com/micro/go-micro"
@@ -11,6 +12,7 @@ import (
 	"github.com/micro/go-micro/client/selector"
 	"github.com/micro/go-micro/registry"
 	myHttp "github.com/micro/go-plugins/client/http"
+	"github.com/micro/go-plugins/registry/consul"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -34,7 +36,7 @@ func CallHttpAPI(addr string, path string, method string) (string, error) {
 func CallHttpAPI2(path string, method string) (string, error) {
 	// 获取consul注册地址
 	consulReg := consul.NewRegistry(
-		registry.Addrs("192.168.2.1"),
+		registry.Addrs("localhost:8500"),
 	)
 	// 获取服务
 	ProdServices, err := consulReg.GetService("ProdServiceHttp")
@@ -77,8 +79,19 @@ func CallHttpAPI3(s selector.Selector, path string, method string) {
 
 // 调用rpc服务
 func CallRpcAPI() (string, error) {
+	// 获取consul注册地址
+	consulReg := consul.NewRegistry(
+		registry.Addrs("localhost:8500"),
+	)
 	// 获取服务
-	prodServiceClient := micro.NewService(micro.Name("ProdService.client"))
+	prodServiceClient := micro.NewService(
+		micro.Name("ProdService.client"),
+		micro.WrapClient(Wrapper.NewLogWrapper),
+	)
+	prodServiceClient.Init(
+		micro.Registry(consulReg),
+	)
+
 	prodService1 := Micros.NewProdService1Service("ProdServiceRPC", prodServiceClient.Client())
 	var req Model.ProdRequest1
 	req.Size = 2
@@ -129,7 +142,7 @@ func TestAPI2(t *testing.T) {
 func TestAPI3(t *testing.T) {
 	// 获取consul注册地址
 	consulReg := consul.NewRegistry(
-		registry.Addrs("192.168.2.1"),
+		registry.Addrs("localhost:8500"),
 	)
 	mySelector := selector.NewSelector(
 		selector.Registry(consulReg),
@@ -145,7 +158,7 @@ func TestAPI4(t *testing.T) {
 func TestAPI5(t *testing.T) {
 	// 获取consul注册地址
 	consulReg := consul.NewRegistry(
-		registry.Addrs("192.168.2.1"),
+		registry.Addrs("localhost:8500"),
 	)
 	mySelector := selector.NewSelector(
 		selector.Registry(consulReg),
