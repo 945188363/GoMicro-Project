@@ -1,8 +1,11 @@
 package ServiceImpl
 
 import (
+	db "GoMicro-Project/DB"
+	"GoMicro-Project/DBModels"
 	"GoMicro-Project/Service/Model"
 	"context"
+	"log"
 	"strconv"
 	"time"
 )
@@ -17,6 +20,13 @@ func NewProd(id int32, name string) *Model.ProdModel {
 }
 
 func (*ProdService1) GetProdList(ctx context.Context, req *Model.ProdRequest1, res *Model.ProdResponse1) error {
+	// 测试gorm插入数据
+	prod := DBModels.ProdDB{Id: 1, Name: "test"}
+	conn := db.DBConn()
+	if err := conn.Create(prod).Error; err != nil {
+		log.Fatal(err)
+		return err
+	}
 	time.Sleep(time.Second * 4)
 	ret := make([]*Model.ProdModel, 0)
 	var i int32
