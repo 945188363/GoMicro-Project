@@ -5,15 +5,15 @@ package Micros
 
 import (
 	"GoMicro-Project/Service/Model"
-	"fmt"
-	"github.com/golang/protobuf/proto"
-	"math"
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	math "math"
 )
 
 import (
-	"context"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/server"
+	context "context"
+	client "github.com/micro/go-micro/client"
+	server "github.com/micro/go-micro/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -48,7 +48,7 @@ func NewProdService1Service(name string, c client.Client) ProdService1Service {
 		c = client.NewClient()
 	}
 	if len(name) == 0 {
-		name = "Service"
+		name = "Models"
 	}
 	return &prodService1Service{
 		c:    c,

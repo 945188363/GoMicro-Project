@@ -87,11 +87,9 @@ func CallRpcAPI() (string, error) {
 	prodServiceClient := micro.NewService(
 		micro.Name("ProdService.client"),
 		micro.WrapClient(Wrapper.NewLogWrapper),
-	)
-	prodServiceClient.Init(
 		micro.Registry(consulReg),
 	)
-
+	prodServiceClient.Init()
 	prodService1 := Micros.NewProdService1Service("ProdServiceRPC", prodServiceClient.Client())
 	var req Model.ProdRequest1
 	req.Size = 2
