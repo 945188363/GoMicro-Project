@@ -1,11 +1,13 @@
 package main
 
 import (
+	"GoMicro-Project/Routers"
 	"GoMicro-Project/Service/Micros"
 	"GoMicro-Project/ServiceImpl"
 	"GoMicro-Project/Wrapper"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
+	"github.com/micro/go-micro/web"
 	"github.com/micro/go-plugins/registry/consul"
 	"log"
 )
@@ -20,12 +22,12 @@ func main() {
 		registry.Addrs("localhost:8500"),
 	)
 
-	// httpService := web.NewService(
-	// 	web.Name("ProdServiceHttp"),
-	// 	web.Address(":8888"),
-	// 	web.Handler(Routers.NewGinRouter()),
-	// 	web.Registry(consulReg),
-	// )
+	httpService := web.NewService(
+		web.Name("ProdServiceHttp"),
+		web.Address(":8888"),
+		web.Handler(Routers.NewGinRouter()),
+		web.Registry(consulReg),
+	)
 	rpcService := micro.NewService(
 		micro.Name("ProdServiceRPC"),
 		micro.Address(":8011"),
@@ -46,5 +48,5 @@ func main() {
 	// 	w.Write([]byte("hello world"))
 	// })
 	// 启动http服务
-	// httpService.Run()
+	httpService.Run()
 }
