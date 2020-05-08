@@ -65,7 +65,6 @@ func CallHttpAPI3(s selector.Selector, path string, method string) {
 		client.Selector(s),
 		client.ContentType("application/json"),
 	)
-
 	// req := myClient.NewRequest("ProdService","v1/prods",map[string]string{})
 	req := myClient.NewRequest("ProdServiceHttp", "v1/prods", Model.ProdRequest{Size: 3})
 	// var resp map[string]interface{}
@@ -142,6 +141,14 @@ func TestAPI3(t *testing.T) {
 	consulReg := consul.NewRegistry(
 		registry.Addrs("localhost:8500"),
 	)
+	services, err := consulReg.GetService("ProdServiceHttp")
+	if err != nil {
+		log.Fatal("err,", err)
+		return
+	}
+	fmt.Println(services[0].Name)
+	fmt.Println(services[0].Nodes[0].Address)
+
 	mySelector := selector.NewSelector(
 		selector.Registry(consulReg),
 		selector.SetStrategy(selector.Random),
