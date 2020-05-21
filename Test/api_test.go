@@ -4,6 +4,7 @@ import (
 	"GoMicro-Project/LoadBalancer"
 	"GoMicro-Project/Service/Micros"
 	"GoMicro-Project/Service/Model"
+	"GoMicro-Project/TestService"
 	"GoMicro-Project/Wrapper"
 	"context"
 	"fmt"
@@ -174,4 +175,42 @@ func TestAPI5(t *testing.T) {
 
 func TestLB(t *testing.T) {
 	LoadBalancer.Test()
+}
+
+func TestPointer(t *testing.T) {
+	var wqq TestService.Prod
+
+	var wqw *TestService.Prod
+
+	wss := TestService.Prod{
+		ProdId:   0,
+		ProdName: "123",
+	}
+
+	wqs := new(TestService.Prod)
+
+	tesss(wqw)
+
+	tewww(wqq)
+
+	fmt.Println(wqq)
+
+	fmt.Println(&wqq)
+
+	fmt.Println(wqw)
+
+	fmt.Println(wss)
+
+	fmt.Println(wqs)
+
+}
+
+func tesss(a *TestService.Prod) {
+
+	fmt.Println("asda")
+}
+
+func tewww(a TestService.Prod) {
+
+	fmt.Println("asda")
 }
