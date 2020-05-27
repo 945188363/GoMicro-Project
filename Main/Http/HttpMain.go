@@ -24,15 +24,15 @@ func main() {
 		web.Registry(consulReg),
 	)
 	// rpcService := micro.NewService(
-	//	// 	micro.Name("ProdServiceRPC"),
-	//	// 	micro.Address(":8011"),
-	//	// 	micro.Registry(consulReg),
-	//	// 	// micro.Registry(mdnsReg),
-	//	// 	micro.WrapClient(Wrapper.NewLogWrapper),
-	//	// )
+	// 		micro.Name("ProdServiceRPC"),
+	// 		micro.Address(":8011"),
+	// 		micro.Registry(consulReg),
+	// 		// micro.Registry(mdnsReg),
+	// 		micro.WrapClient(Wrapper.NewLogWrapper),
+	// 	)
 	httpService.Init()
 	// rpcService.Init()
-	// // 注册并启动rpc服务
+	// 注册并启动rpc服务
 	// if err := Micros.RegisterProdService1Handler(rpcService.Server(), new(ServiceImpl.ProdService1)); err != nil {
 	// 	log.Fatal(err)
 	// }
