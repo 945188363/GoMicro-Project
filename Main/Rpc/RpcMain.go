@@ -26,20 +26,36 @@ func main() {
 	// 	web.Handler(Routers.NewGinRouter()),
 	// 	web.Registry(consulReg),
 	// )
-	rpcService := micro.NewService(
-		micro.Name("ProdServiceRPC"),
+	// rpcService := micro.NewService(
+	// 	micro.Name("ProdServiceRPC"),
+	// 	micro.Address(":8011"),
+	// 	micro.Registry(consulReg),
+	// 	// micro.Registry(mdnsReg),
+	// 	micro.WrapClient(Wrapper.NewLogWrapper),
+	// )
+
+	rpcService2 := micro.NewService(
+		micro.Name("RpcService"),
 		micro.Address(":8011"),
 		micro.Registry(consulReg),
 		// micro.Registry(mdnsReg),
 		micro.WrapClient(Wrapper.NewLogWrapper),
 	)
 	// httpService.Init()
-	rpcService.Init()
+	// rpcService.Init()
+	rpcService2.Init()
 	// 注册并启动rpc服务
-	if err := Micros.RegisterProdService1Handler(rpcService.Server(), new(ServiceImpl.ProdService1)); err != nil {
+	// if err := Micros.RegisterProdService1Handler(rpcService.Server(), new(ServiceImpl.ProdService1)); err != nil {
+	// 	log.Fatal(err)
+	// }
+	if err := Micros.RegisterRpcServiceHandler(rpcService2.Server(), new(ServiceImpl.RpcService)); err != nil {
 		log.Fatal(err)
 	}
-	if err := rpcService.Run(); err != nil {
+	// if err := rpcService.Run(); err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	if err := rpcService2.Run(); err != nil {
 		log.Fatal(err)
 	}
 

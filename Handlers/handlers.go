@@ -8,7 +8,7 @@ import (
 )
 
 func GetProdsList(ginCtx *gin.Context) {
-	time.Sleep(time.Duration(5) * time.Second)
+	time.Sleep(time.Duration(1) * time.Second)
 	var msg Core.Message
 	msg.Data = make(map[string]interface{})
 	msg.Data["prod"] = TestService.NewProdList(5)

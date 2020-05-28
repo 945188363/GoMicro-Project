@@ -27,7 +27,7 @@ func (*ProdService1) GetProdList(ctx context.Context, req *Model.ProdRequest1, r
 		log.Fatal(err)
 		return err
 	}
-	time.Sleep(time.Second * 4)
+	time.Sleep(time.Second * 1)
 	ret := make([]*Model.ProdModel, 0)
 	var i int32
 	for i = 0; i < req.Size; i++ {
