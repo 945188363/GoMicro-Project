@@ -7,7 +7,6 @@ import (
 	"GoMicro-Project/Utils"
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"time"
 )
@@ -26,7 +25,6 @@ func (*RpcService) GetProdListRpc(ctx context.Context, req *Model.RpcRequest, re
 	if req.Request == nil {
 		return errors.New("request is empty")
 	}
-	fmt.Println(req.Request)
 	var ret int
 	// 反序列化请求参数map
 	// paramMap :=Utils.BytesToMap(req.Request)
@@ -40,9 +38,9 @@ func (*RpcService) GetProdListRpc(ctx context.Context, req *Model.RpcRequest, re
 		ret = i * i
 	}
 	// 序列化响应数据map
-	dataMap := make(map[string]interface{})
-	dataMap["Num"] = ret
-	resp.Response = Utils.MapToBytes(dataMap)
-	// resp.Response = Utils.IntToBytes(ret)
+	// dataMap := make(map[string]interface{})
+	// dataMap["Num"] = ret
+	// resp.Response = Utils.MapToBytes(dataMap)
+	resp.Response = Utils.IntToBytes(ret)
 	return nil
 }
