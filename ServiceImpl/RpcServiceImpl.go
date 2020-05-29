@@ -7,6 +7,7 @@ import (
 	"GoMicro-Project/Utils"
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"time"
 )
@@ -22,21 +23,26 @@ func (*RpcService) GetProdListRpc(ctx context.Context, req *Model.RpcRequest, re
 		return err
 	}
 	time.Sleep(time.Second * 1)
-	// ret := make([]int, 0)
-	var ret int
-	// size := Utils.BytesToMessage(req.Request).Data["Size"]
-	size := req.Request
-	if size == nil {
-		return errors.New("empty data")
+	if req.Request == nil {
+		return errors.New("request is empty")
 	}
-	inde := Utils.BytesToInt(size)
+	fmt.Println(req.Request)
+	var ret int
+	// 反序列化请求参数map
+	// paramMap :=Utils.BytesToMap(req.Request)
+	// if len(paramMap) == 0 {
+	// 	return errors.New("param is empty")
+	// }
+	// inde := paramMap["Size"]
+	inde := Utils.BytesToInt(req.Request)
+
 	for i := 0; i < inde; i++ {
 		ret = i * i
 	}
-	// respData := make(map[string]interface{})
-	// respData["Data"] = ret
-	// msg := Core.NewMessage(203,"rpc service dial success",respData)
-	// resp.Response = Utils.MessageToBytes(msg)
-	resp.Response = Utils.IntToBytes(ret)
+	// 序列化响应数据map
+	dataMap := make(map[string]interface{})
+	dataMap["Num"] = ret
+	resp.Response = Utils.MapToBytes(dataMap)
+	// resp.Response = Utils.IntToBytes(ret)
 	return nil
 }
